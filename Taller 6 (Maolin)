@@ -1,0 +1,920 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/niloam/TALLER-6/blob/main/Taller%206%20(Maolin)\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!g++ --version"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "OoDbjuiIBFVx",
+        "outputId": "ec6ea583-011f-40b9-dcf5-6f189c706b47"
+      },
+      "execution_count": 2,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "g++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0\n",
+            "Copyright (C) 2021 Free Software Foundation, Inc.\n",
+            "This is free software; see the source for copying conditions.  There is NO\n",
+            "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!gcc --version\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "a-oqH_o0BsS3",
+        "outputId": "2876edaf-e55b-407d-b121-02285c619157"
+      },
+      "execution_count": 3,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "gcc (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0\n",
+            "Copyright (C) 2021 Free Software Foundation, Inc.\n",
+            "This is free software; see the source for copying conditions.  There is NO\n",
+            "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "%%shell\n",
+        "g++ --version"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "maUe-nfNCcoy",
+        "outputId": "3737d89b-1db0-4f71-ab5b-be6d1c0fcc8a"
+      },
+      "execution_count": 4,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "g++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0\n",
+            "Copyright (C) 2021 Free Software Foundation, Inc.\n",
+            "This is free software; see the source for copying conditions.  There is NO\n",
+            "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n",
+            "\n"
+          ]
+        },
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": []
+          },
+          "metadata": {},
+          "execution_count": 4
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "%%writefile operaciones.h\n",
+        "#ifndef OPERACIONES_H\n",
+        "#define OPERACIONES_H\n",
+        "\n",
+        "void suma(int a, int b, int &resultado);\n",
+        "void resta(int a, int b, int &resultado);\n",
+        "void multiplica(int a, int b, int &resultado);\n",
+        "void division(int a, int b, int &cociente, int &residuo);\n",
+        "\n",
+        "void sumaArreglo(int arr[], int n, int &resultado);\n",
+        "void sumaMatriz(int mat[][3], int filas, int columnas, int &resultado);\n",
+        "\n",
+        "#endif"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "KnSyUNr-CgU1",
+        "outputId": "0b77df08-ffca-4b81-f622-be480180b6c1"
+      },
+      "execution_count": 5,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Writing operaciones.h\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "%%writefile operaciones.cpp\n",
+        "#include <iostream>\n",
+        "#include \"operaciones.h\"\n",
+        "using namespace std;\n",
+        "\n",
+        "void suma(int a, int b, int &resultado) { resultado = a + b; }\n",
+        "void resta(int a, int b, int &resultado) { resultado = a - b; }\n",
+        "void multiplica(int a, int b, int &resultado) { resultado = a * b; }\n",
+        "\n",
+        "void division(int a, int b, int &cociente, int &residuo) {\n",
+        "    if (b == 0) {\n",
+        "        cociente = 0; residuo = 0;\n",
+        "        cout << \"Error: division por cero.\" << endl;\n",
+        "    } else {\n",
+        "        cociente = a / b;\n",
+        "        residuo = a % b;\n",
+        "    }\n",
+        "}\n",
+        "\n",
+        "void sumaArreglo(int arr[], int n, int &resultado) {\n",
+        "    resultado = 0;\n",
+        "    for (int i = 0; i < n; i++) resultado += arr[i];\n",
+        "}\n",
+        "\n",
+        "void sumaMatriz(int mat[][3], int filas, int columnas, int &resultado) {\n",
+        "    resultado = 0;\n",
+        "    for (int i = 0; i < filas; i++)\n",
+        "        for (int j = 0; j < columnas; j++)\n",
+        "            resultado += mat[i][j];\n",
+        "}\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "UFnmC7UwCryf",
+        "outputId": "27d97cf7-11c2-40e6-b4ac-2e82469d9b8f"
+      },
+      "execution_count": 6,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Writing operaciones.cpp\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "%%writefile main.cpp\n",
+        "#include <iostream>\n",
+        "#include \"operaciones.h\"\n",
+        "using namespace std;\n",
+        "\n",
+        "int main() {\n",
+        "    int a, b;\n",
+        "    cout << \"Digite el primer numero: \";\n",
+        "    cin >> a;\n",
+        "    cout << \"Digite el segundo numero: \";\n",
+        "    cin >> b;\n",
+        "\n",
+        "    int r;\n",
+        "    suma(a, b, r);\n",
+        "    cout << \"Suma = \" << r << endl;\n",
+        "\n",
+        "    resta(a, b, r);\n",
+        "    cout << \"Resta = \" << r << endl;\n",
+        "\n",
+        "    multiplica(a, b, r);\n",
+        "    cout << \"Multiplicacion = \" << r << endl;\n",
+        "\n",
+        "    int coc, res;\n",
+        "    division(a, b, coc, res);\n",
+        "    cout << \"Division = \" << coc << \" residuo \" << res << endl;\n",
+        "\n",
+        "    int arr[5] = {1, 2, 3, 4, 5};\n",
+        "    sumaArreglo(arr, 5, r);\n",
+        "    cout << \"Suma del arreglo = \" << r << endl;\n",
+        "\n",
+        "    int mat[2][3] = {{1, 2, 3}, {4, 5, 6}};\n",
+        "    sumaMatriz(mat, 2, 3, r);\n",
+        "    cout << \"Suma de la matriz = \" << r << endl;\n",
+        "\n",
+        "    return 0;\n",
+        "}\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "IFGCGFpPCzaD",
+        "outputId": "fff712d7-5049-4251-e384-e12da6a97d11"
+      },
+      "execution_count": 10,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Overwriting main.cpp\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!g++ main.cpp operaciones.cpp -o programa\n",
+        "!./programa\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "2lXLZ_RNDYD4",
+        "outputId": "749a237a-6cde-41d7-9dc0-f639ef72b1df"
+      },
+      "execution_count": 12,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Digite el primer numero: 2\n",
+            "Digite el segundo numero: 4\n",
+            "Suma = 6\n",
+            "Resta = -2\n",
+            "Multiplicacion = 8\n",
+            "Division = 0 residuo 2\n",
+            "Suma del arreglo = 15\n",
+            "Suma de la matriz = 21\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "%%writefile funciones.h\n",
+        "#ifndef FUNCIONES_H\n",
+        "#define FUNCIONES_H\n",
+        "\n",
+        "float calcularPromedio(int arr[], int n);\n",
+        "int encontrarMayor(int arr[], int n);\n",
+        "int encontrarMenor(int arr[], int n);\n",
+        "\n",
+        "#endif\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "YwIkTN1QDg_v",
+        "outputId": "16e2ef4b-0ee0-44f1-b0f1-0b48af9a6763"
+      },
+      "execution_count": 13,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Writing funciones.h\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "%%writefile funciones.cpp\n",
+        "#include \"funciones.h\"\n",
+        "\n",
+        "float calcularPromedio(int arr[], int n) {\n",
+        "    float suma = 0;\n",
+        "    for (int i = 0; i < n; i++) suma += arr[i];\n",
+        "    return suma / n;\n",
+        "}\n",
+        "\n",
+        "int encontrarMayor(int arr[], int n) {\n",
+        "    int mayor = arr[0];\n",
+        "    for (int i = 1; i < n; i++)\n",
+        "        if (arr[i] > mayor) mayor = arr[i];\n",
+        "    return mayor;\n",
+        "}\n",
+        "\n",
+        "int encontrarMenor(int arr[], int n) {\n",
+        "    int menor = arr[0];\n",
+        "    for (int i = 1; i < n; i++)\n",
+        "        if (arr[i] < menor) menor = arr[i];\n",
+        "    return menor;\n",
+        "}\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "l3t2N83vDksv",
+        "outputId": "dbe4dde7-d33c-41af-bbcb-512b03c5542f"
+      },
+      "execution_count": 14,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Writing funciones.cpp\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "%%writefile main.cpp\n",
+        "#include <iostream>\n",
+        "#include \"funciones.h\"\n",
+        "using namespace std;\n",
+        "\n",
+        "int main() {\n",
+        "    int arr[5];\n",
+        "    cout << \"Digite 5 numeros: \";\n",
+        "    for (int i = 0; i < 5; i++) cin >> arr[i];\n",
+        "\n",
+        "    cout << \"Promedio = \" << calcularPromedio(arr, 5) << endl;\n",
+        "    cout << \"Mayor = \" << encontrarMayor(arr, 5) << endl;\n",
+        "    cout << \"Menor = \" << encontrarMenor(arr, 5) << endl;\n",
+        "\n",
+        "    return 0;\n",
+        "}"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "xG-P8xFCDotU",
+        "outputId": "b480a901-12a0-4958-db01-f62ee9e9dd67"
+      },
+      "execution_count": 15,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Overwriting main.cpp\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!g++ main.cpp funciones.cpp -o programa\n",
+        "!./programa\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "QnDCkbQQDwaY",
+        "outputId": "5fd579a9-2fb8-445e-9333-b2eb11ee7274"
+      },
+      "execution_count": 16,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Digite 5 numeros: 2\n",
+            "5\n",
+            "6\n",
+            "8\n",
+            "1\n",
+            "Promedio = 4.4\n",
+            "Mayor = 8\n",
+            "Menor = 1\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "%%writefile ejercicio3.cpp\n",
+        "#include <iostream>\n",
+        "using namespace std;\n",
+        "\n",
+        "void mostraArreglo(int arr[], int n) {\n",
+        "    cout << \"Arreglo: \";\n",
+        "    for (int i = 0; i < n; i++) cout << arr[i] << \" \";\n",
+        "    cout << endl;\n",
+        "}\n",
+        "\n",
+        "int sumarElemento(int arr[], int n) {\n",
+        "    int suma = 0;\n",
+        "    for (int i = 0; i < n; i++) suma += arr[i];\n",
+        "    return suma;\n",
+        "}\n",
+        "\n",
+        "int contarPar(int arr[], int n) {\n",
+        "    int cont = 0;\n",
+        "    for (int i = 0; i < n; i++)\n",
+        "        if (arr[i] % 2 == 0) cont++;\n",
+        "    return cont;\n",
+        "}\n",
+        "\n",
+        "int main() {\n",
+        "    int arr[10];\n",
+        "    cout << \"Digite 10 numeros: \";\n",
+        "    for (int i = 0; i < 10; i++) cin >> arr[i];\n",
+        "\n",
+        "    mostraArreglo(arr, 10);\n",
+        "    cout << \"Suma = \" << sumarElemento(arr, 10) << endl;\n",
+        "    cout << \"Cantidad de pares = \" << contarPar(arr, 10) << endl;\n",
+        "\n",
+        "    return 0;\n",
+        "}\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "TGsYzZTGER_F",
+        "outputId": "de024bfa-b1b0-47f8-f39b-9ab65825eede"
+      },
+      "execution_count": 20,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Overwriting ejercicio3.cpp\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!g++ ejercicio3.cpp -o ejercicio3\n",
+        "!./ejercicio3\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "4q4osph1EbqE",
+        "outputId": "5ce6fbe7-9207-4179-9015-5e80a6a5ecc8"
+      },
+      "execution_count": 21,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Digite 10 numeros: 2\n",
+            "3\n",
+            "4\n",
+            "5\n",
+            "6\n",
+            "7\n",
+            "8\n",
+            "9\n",
+            "2\n",
+            "1\n",
+            "Arreglo: 2 3 4 5 6 7 8 9 2 1 \n",
+            "Suma = 47\n",
+            "Cantidad de pares = 5\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "%%writefile ejercicio4.cpp\n",
+        "#include <iostream>\n",
+        "using namespace std;\n",
+        "\n",
+        "void muestraArreglo(int arr[], int n) {\n",
+        "    for (int i = 0; i < n; i++) cout << arr[i] << \" \";\n",
+        "    cout << endl;\n",
+        "}\n",
+        "\n",
+        "int busquedaL(int arr[], int n, int valor) {\n",
+        "    for (int i = 0; i < n; i++)\n",
+        "        if (arr[i] == valor) return i;\n",
+        "    return -1;\n",
+        "}\n",
+        "\n",
+        "void burbuja(int arr[], int n) {\n",
+        "    for (int i = 0; i < n-1; i++)\n",
+        "        for (int j = 0; j < n-i-1; j++)\n",
+        "            if (arr[j] > arr[j+1]) swap(arr[j], arr[j+1]);\n",
+        "}\n",
+        "\n",
+        "int main() {\n",
+        "    int arr[8];\n",
+        "    cout << \"Digite 8 numeros: \";\n",
+        "    for (int i = 0; i < 8; i++) cin >> arr[i];\n",
+        "\n",
+        "    cout << \"Arreglo original: \";\n",
+        "    muestraArreglo(arr, 8);\n",
+        "\n",
+        "    burbuja(arr, 8);\n",
+        "    cout << \"Arreglo ordenado: \";\n",
+        "    muestraArreglo(arr, 8);\n",
+        "\n",
+        "    int valor;\n",
+        "    cout << \"Digite valor a buscar: \";\n",
+        "    cin >> valor;\n",
+        "    int pos = busquedaL(arr, 8, valor);\n",
+        "    if (pos != -1) cout << \"Encontrado en posicion \" << pos << endl;\n",
+        "    else cout << \"No encontrado\" << endl;\n",
+        "\n",
+        "    return 0;\n",
+        "}\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "736CZgmyFLaU",
+        "outputId": "2a1700de-8524-4da4-8928-573ff9690b83"
+      },
+      "execution_count": 22,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Writing ejercicio4.cpp\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!g++ ejercicio4.cpp -o ejercicio4\n",
+        "!./ejercicio4\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "BbkhzMf-FhxW",
+        "outputId": "2f619de4-5252-46a8-a506-ce8c328b215a"
+      },
+      "execution_count": 24,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Digite 8 numeros: 2\n",
+            "4\n",
+            "1\n",
+            "8\n",
+            "5\n",
+            "4\n",
+            "9\n",
+            "0\n",
+            "Arreglo original: 2 4 1 8 5 4 9 0 \n",
+            "Arreglo ordenado: 0 1 2 4 4 5 8 9 \n",
+            "Digite valor a buscar: 5\n",
+            "Encontrado en posicion 5\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "%%writefile ejercicio5.cpp\n",
+        "#include <iostream>\n",
+        "using namespace std;\n",
+        "\n",
+        "void muestraLAMatriz(int mat[3][3]) {\n",
+        "    cout << \"Matriz:\" << endl;\n",
+        "    for (int i = 0; i < 3; i++) {\n",
+        "        for (int j = 0; j < 3; j++) cout << mat[i][j] << \" \";\n",
+        "        cout << endl;\n",
+        "    }\n",
+        "}\n",
+        "\n",
+        "void sumarFila(int mat[3][3]) {\n",
+        "    for (int i = 0; i < 3; i++) {\n",
+        "        int suma = 0;\n",
+        "        for (int j = 0; j < 3; j++) suma += mat[i][j];\n",
+        "        cout << \"Suma fila \" << i << \" = \" << suma << endl;\n",
+        "    }\n",
+        "}\n",
+        "\n",
+        "int sumaLaDiagonal(int mat[3][3]) {\n",
+        "    int suma = 0;\n",
+        "    for (int i = 0; i < 3; i++) suma += mat[i][i];\n",
+        "    return suma;\n",
+        "}\n",
+        "\n",
+        "int main() {\n",
+        "    int mat[3][3];\n",
+        "    cout << \"Digite elementos de matriz 3x3:\" << endl;\n",
+        "    for (int i = 0; i < 3; i++)\n",
+        "        for (int j = 0; j < 3; j++) cin >> mat[i][j];\n",
+        "\n",
+        "    muestraLAMatriz(mat);\n",
+        "    sumarFila(mat);\n",
+        "    cout << \"Suma diagonal principal = \" << sumaLaDiagonal(mat) << endl;\n",
+        "\n",
+        "    return 0;\n",
+        "}"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "61czQLgJFu9h",
+        "outputId": "7f063336-2708-4e42-ea0f-9475089d858a"
+      },
+      "execution_count": 25,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Writing ejercicio5.cpp\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!g++ ejercicio5.cpp -o ejercicio5\n",
+        "!./ejercicio5\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "10YcPiB4F_5g",
+        "outputId": "c7117466-e0d1-4fdc-b7ea-6eb19f4e9b42"
+      },
+      "execution_count": 26,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Digite elementos de matriz 3x3:\n",
+            "2\n",
+            "3\n",
+            "1\n",
+            "0\n",
+            "9\n",
+            "5\n",
+            "4\n",
+            "\n",
+            "9\n",
+            "6\n",
+            "Matriz:\n",
+            "2 3 1 \n",
+            "0 9 5 \n",
+            "4 9 6 \n",
+            "Suma fila 0 = 6\n",
+            "Suma fila 1 = 14\n",
+            "Suma fila 2 = 19\n",
+            "Suma diagonal principal = 17\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "%%writefile bd.h\n",
+        "#ifndef BD_H\n",
+        "#define BD_H\n",
+        "\n",
+        "void llenarMatriz(char mat[5][3], int filas, int columnas);\n",
+        "void mostrarMatriz(char mat[5][3], int filas, int columnas);\n",
+        "bool buscarCodigo(char mat[5][3], int filas, char codigo);\n",
+        "int contarGrupo(char mat[5][3], int filas, char grupo);\n",
+        "\n",
+        "#endif\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "LdcGTYI4J5nh",
+        "outputId": "289e07c7-a94a-4662-f452-7a4a545538a5"
+      },
+      "execution_count": 95,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Overwriting bd.h\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "%%writefile bd.cpp\n",
+        "#include <iostream>\n",
+        "#include \"bd.h\"\n",
+        "using namespace std;\n",
+        "\n",
+        "void llenarMatriz(char mat[5][3], int filas, int columnas) {\n",
+        "    cout << \"Ingrese datos de estudiantes (Codigo Inicial Grupo):\" << endl;\n",
+        "    for (int i = 0; i < filas; i++) {\n",
+        "        for (int j = 0; j < columnas; j++) {\n",
+        "            cin >> mat[i][j];\n",
+        "        }\n",
+        "    }\n",
+        "}\n",
+        "\n",
+        "void mostrarMatriz(char mat[5][3], int filas, int columnas) {\n",
+        "    cout << \"Base de datos:\" << endl;\n",
+        "    for (int i = 0; i < filas; i++) {\n",
+        "        for (int j = 0; j < columnas; j++) {\n",
+        "            cout << mat[i][j] << \" \";\n",
+        "        }\n",
+        "        cout << endl;\n",
+        "    }\n",
+        "}\n",
+        "\n",
+        "bool buscarCodigo(char mat[5][3], int filas, char codigo) {\n",
+        "    for (int i = 0; i < filas; i++) {\n",
+        "        if (mat[i][0] == codigo) {\n",
+        "            cout << \"Registro encontrado: \";\n",
+        "            for (int j = 0; j < 3; j++) cout << mat[i][j] << \" \";\n",
+        "            cout << endl;\n",
+        "            return true;\n",
+        "        }\n",
+        "    }\n",
+        "    return false;\n",
+        "}\n",
+        "\n",
+        "int contarGrupo(char mat[5][3], int filas, char grupo) {\n",
+        "    int cont = 0;\n",
+        "    for (int i = 0; i < filas; i++) {\n",
+        "        if (mat[i][2] == grupo) cont++;\n",
+        "    }\n",
+        "    return cont;\n",
+        "}\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "MVna_044J9_R",
+        "outputId": "c49c93df-adf8-404d-bb0e-8e8ed031582c"
+      },
+      "execution_count": 96,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Overwriting bd.cpp\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "%%writefile main.cpp\n",
+        "#include <iostream>\n",
+        "#include \"bd.h\"\n",
+        "using namespace std;\n",
+        "\n",
+        "int main() {\n",
+        "    const int filas = 5, columnas = 3;\n",
+        "    char mat[filas][columnas];\n",
+        "\n",
+        "    // 1. Llenar matriz\n",
+        "    llenarMatriz(mat, filas, columnas);\n",
+        "\n",
+        "    // 2. Mostrar matriz\n",
+        "    mostrarMatriz(mat, filas, columnas);\n",
+        "\n",
+        "    // 3. Buscar por código\n",
+        "    char codigo;\n",
+        "    cout << \"Digite codigo a buscar: \";\n",
+        "    cin >> codigo;\n",
+        "    if (!buscarCodigo(mat, filas, codigo))\n",
+        "        cout << \"Codigo no encontrado.\" << endl;\n",
+        "\n",
+        "    // 4. Contar estudiantes por grupo\n",
+        "    char grupo;\n",
+        "    cout << \"Digite grupo a contar (un solo caracter): \";\n",
+        "    cin >> grupo;\n",
+        "    cout << grupo << endl;\n",
+        "    cout << \"Cantidad de estudiantes en grupo \" << grupo << \" = \"\n",
+        "         << contarGrupo(mat, filas, grupo) << endl;\n",
+        "\n",
+        "    return 0;\n",
+        "}\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "BN6o3xASKFJp",
+        "outputId": "851644c0-cd79-4a2f-e863-93fcd6f635e2"
+      },
+      "execution_count": 100,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Overwriting main.cpp\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!g++ main.cpp bd.cpp -o ejercicio6\n",
+        "!./ejercicio6\n"
+      ],
+      "metadata": {
+        "id": "4tPSBRvOQTut",
+        "outputId": "ac97a83e-aad9-4083-fd34-c43e1f177103",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": 101,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Ingrese datos de estudiantes (Codigo Inicial Grupo):\n",
+            "AS3\n",
+            "DE4\n",
+            "FR5\n",
+            "GT6\n",
+            "HY7\n",
+            "Base de datos:\n",
+            "A S 3 \n",
+            "D E 4 \n",
+            "F R 5 \n",
+            "G T 6 \n",
+            "H Y 7 \n",
+            "Digite codigo a buscar: AS3\n",
+            "Registro encontrado: A S 3 \n",
+            "Digite grupo a contar (un solo caracter): S\n",
+            "Cantidad de estudiantes en grupo S = 0\n"
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "colab": {
+      "name": "Te damos la bienvenida a Colab",
+      "provenance": [],
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "display_name": "Python 3",
+      "name": "python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}
